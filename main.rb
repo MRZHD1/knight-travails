@@ -4,7 +4,8 @@ class Tree
     @final = final
     @arr = []
   end
-  def find_end(node=@start, arr=[])
+
+  def create_path(node=@start, arr=[])
     if node.position == @final
       return [node.position]
     end
@@ -13,20 +14,20 @@ class Tree
     while @arr == [] do
       node.children = []
       node.make_children(0,i)
-      find(node, arr)
+      find_path(node, arr)
       i += 1
     end
     return @arr
   end
 
-  def find(node, arr)
+  def find_path(node, arr)
     if arr.include?(@final)
       @arr = arr
       return
     end
     unless node.children == []
       for pos in node.children
-        find(pos, arr + [node.position])
+        find_path(pos, arr + [node.position])
       end
     else
       return arr + [node.position]
@@ -84,5 +85,16 @@ class Node
   end
 end
 
-tree = Tree.new([3,3], [4,3])
-p tree.find_end
+
+
+def knight_moves(start, final)
+  tree = Tree.new(start, final)
+  path = tree.create_path
+  s = "You made it in #{path.length-1} moves! Here's your path:"
+  for move in path
+    s += "\n  #{move}"
+  end
+  puts s
+end
+
+knight_moves([3,3], [4,3])
